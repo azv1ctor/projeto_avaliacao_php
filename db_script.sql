@@ -28,3 +28,7 @@ CREATE TABLE tbl_funcionario (
 
 INSERT INTO tbl_usuario (login, senha)
 VALUES ('teste@gmail.com.br', MD5('1234'));
+
+-- teste de inserção para funcionário com mais de 5 anos
+INSERT INTO tbl_funcionario (nome, cpf, rg, email, id_empresa, data_cadastro, salario, bonificacao) 
+VALUES ('Funcionário Antigo', '12345678901', '12345678', 'antigo@email.com', 1, '2018-01-01', 3000.00, 0.00);

@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <link rel="stylesheet" href="/css/login.css">
     <script src="/js/login.js" defer></script>
 </head>
 <body>
-    <h1>Login</h1>
     <form id="loginForm">
+        <h1>Login</h1>
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" required>
         <br>
@@ -16,7 +17,7 @@
         <input type="password" id="password" name="password" required>
         <br>
         <button type="submit">Entrar</button>
+        <p id="errorMessage"></p>
     </form>
-    <p id="errorMessage" style="color: red;"></p>
 </body>
 </html>

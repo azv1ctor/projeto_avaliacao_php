@@ -159,6 +159,15 @@ class HomeController {
         } catch (Exception $e) {
             echo json_encode(['success' => false, 'message' => 'Erro ao atualizar funcionário: ' . $e->getMessage()]);
         }
-    }    
+    }   
     
+    public function listarFuncionarios() {
+        $db = Database::connect();
+        $stmt = $db->query("SELECT f.*, e.nome AS empresa_nome 
+                            FROM tbl_funcionario f
+                            LEFT JOIN tbl_empresa e ON f.id_empresa = e.id_empresa");
+        $funcionarios = $stmt->fetchAll();
+    
+        echo json_encode($funcionarios);
+    }    
 }

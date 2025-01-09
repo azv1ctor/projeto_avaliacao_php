@@ -27,6 +27,8 @@ if ($uri === '/login' && $method === 'GET') {
     (new HomeController())->buscarFuncionario();
 } elseif ($uri === '/editar-funcionario' && $method === 'POST') {
     (new HomeController())->editarFuncionario();
+} elseif ($uri === '/api/funcionarios' && $method === 'GET') {
+    (new HomeController())->listarFuncionarios();
 } else {
     header("HTTP/1.0 404 Not Found");
     echo "Página não encontrada!";

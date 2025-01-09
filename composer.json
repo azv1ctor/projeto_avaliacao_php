@@ -12,5 +12,7 @@
             "email": "joaovictoralvesazevedo@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "setasign/fpdf": "^1.8"
+    }
 }

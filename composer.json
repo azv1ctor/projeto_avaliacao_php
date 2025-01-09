@@ -1,0 +1,16 @@
+{
+    "name": "joaovictor/controle_funcionarios",
+    "description": "Teste para controle de funcionários em PHP",
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    },
+    "authors": [
+        {
+            "name": "azv1ctor",
+            "email": "joaovictoralvesazevedo@gmail.com"
+        }
+    ],
+    "require": {}
+}

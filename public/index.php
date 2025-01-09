@@ -4,7 +4,7 @@ require_once "../vendor/autoload.php";
 use App\Controllers\LoginController;
 use App\Controllers\HomeController;
 
-$uri = $_SERVER['REQUEST_URI'];
+$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $method = $_SERVER['REQUEST_METHOD'];
 
 if ($uri === '/login' && $method === 'GET') {
@@ -23,6 +23,10 @@ if ($uri === '/login' && $method === 'GET') {
     (new HomeController())->cadastroFuncionario();
 } elseif ($uri === '/cadastro-empresa' && $method === 'GET') {
     (new HomeController())->cadastroEmpresa();
+} elseif ($uri === '/buscar-funcionario' && $method === 'GET') {
+    (new HomeController())->buscarFuncionario();
+} elseif ($uri === '/editar-funcionario' && $method === 'POST') {
+    (new HomeController())->editarFuncionario();
 } else {
     header("HTTP/1.0 404 Not Found");
     echo "Página não encontrada!";

@@ -219,3 +219,49 @@ function formatarData(data) {
     const ano = dataObj.getFullYear();
     return `${dia}/${mes}/${ano}`;
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    const addEmpresaForm = document.getElementById("addEmpresaForm");
+    const successModal = document.getElementById("successModal");
+    const errorModal = document.getElementById("errorModal");
+    const successMessage = document.getElementById("successMessage");
+    const errorMessage = document.getElementById("errorMessage");
+
+    addEmpresaForm.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        const formData = new FormData(addEmpresaForm);
+
+        try {
+            const response = await fetch("/adicionar-empresa", {
+                method: "POST",
+                body: formData,
+            });
+            const result = await response.json();
+
+            if (result.success) {
+                successMessage.textContent = result.message;
+                successModal.style.display = "block";
+
+                setTimeout(() => {
+                    successModal.style.display = "none";
+                    window.location.reload();
+                }, 3000);
+            } else {
+                errorMessage.textContent = result.message;
+                errorModal.style.display = "block";
+
+                setTimeout(() => {
+                    errorModal.style.display = "none";
+                }, 3000);
+            }
+        } catch (error) {
+            console.error("Erro ao cadastrar empresa:", error);
+            errorMessage.textContent = "Erro ao cadastrar empresa.";
+            errorModal.style.display = "block";
+
+            setTimeout(() => {
+                errorModal.style.display = "none";
+            }, 3000);
+        }
+    });
+});

@@ -70,17 +70,32 @@ class HomeController {
 
     public function addEmpresa() {
         $nome = $_POST['nome'] ?? '';
+    
+        if (empty($nome)) {
+            echo json_encode(['success' => false, 'message' => 'O nome da empresa é obrigatório.']);
+            return;
+        }
+    
+        $db = Database::connect();
 
-        if (!empty($nome)) {
-            $db = Database::connect();
-            $stmt = $db->prepare("INSERT INTO tbl_empresa (nome) VALUES (:nome)");
-            $stmt->bindValue(':nome', $nome);
-            $stmt->execute();
+        $stmt = $db->prepare("SELECT * FROM tbl_empresa WHERE nome = :nome");
+        $stmt->bindValue(':nome', $nome);
+        $stmt->execute();
+    
+        if ($stmt->fetch()) {
+            echo json_encode(['success' => false, 'message' => 'Já existe uma empresa com este nome.']);
+            return;
         }
 
-        header("Location: /home");
-        exit;
-    }
+        $stmt = $db->prepare("INSERT INTO tbl_empresa (nome) VALUES (:nome)");
+        $stmt->bindValue(':nome', $nome);
+    
+        if ($stmt->execute()) {
+            echo json_encode(['success' => true, 'message' => 'Empresa cadastrada com sucesso!']);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Erro ao cadastrar empresa.']);
+        }
+    }    
 
     public function cadastroFuncionario() {
         $db = Database::connect();

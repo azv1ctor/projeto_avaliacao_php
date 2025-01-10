@@ -144,21 +144,52 @@ document.getElementById("exportPDF").addEventListener("click", async function ()
         pdf.setFontSize(16);
         pdf.text("Lista de Funcionários", 105, 10, null, null, "center");
 
-        pdf.setFontSize(12);
-        pdf.text("Nome", 10, 30);
-        pdf.text("CPF", 50, 30);
-        pdf.text("RG", 90, 30);
-        pdf.text("Email", 130, 30);
-        pdf.text("Empresa", 170, 30);
+        const colunas = [
+            { header: "Nome", dataKey: "nome" },
+            { header: "CPF", dataKey: "cpf" },
+            { header: "RG", dataKey: "rg" },
+            { header: "Email", dataKey: "email" },
+            { header: "Empresa", dataKey: "empresa_nome" },
+            { header: "Salário", dataKey: "salario_formatado" },
+            { header: "Bonificação", dataKey: "bonificacao_formatada" },
+            { header: "Data Cadastro", dataKey: "data_cadastro_formatada" },
+        ];
 
-        let y = 40;
-        funcionarios.forEach((funcionario) => {
-            pdf.text(funcionario.nome, 10, y);
-            pdf.text(funcionario.cpf, 50, y);
-            pdf.text(funcionario.rg, 90, y);
-            pdf.text(funcionario.email, 130, y);
-            pdf.text(funcionario.empresa_nome, 170, y);
-            y += 10;
+        const data = funcionarios.map((funcionario) => {
+            const salarioFormatado = `R$ ${parseFloat(funcionario.salario).toLocaleString("pt-BR", {
+                minimumFractionDigits: 2,
+            })}`;
+            const bonificacao = calcularBonificacao(funcionario.salario, funcionario.data_cadastro);
+            const bonificacaoFormatada = `R$ ${bonificacao.toLocaleString("pt-BR", {
+                minimumFractionDigits: 2,
+            })}`;
+            const dataFormatada = formatarData(funcionario.data_cadastro);
+
+            return {
+                nome: funcionario.nome,
+                cpf: funcionario.cpf,
+                rg: funcionario.rg,
+                email: funcionario.email,
+                empresa_nome: funcionario.empresa_nome,
+                salario_formatado: salarioFormatado,
+                bonificacao_formatada: bonificacaoFormatada,
+                data_cadastro_formatada: dataFormatada,
+            };
+        });
+
+        pdf.autoTable({
+            columns: colunas,
+            body: data,
+            startY: 20,
+            theme: "grid",
+            headStyles: {
+                fillColor: [1, 81, 140],
+                textColor: [255, 255, 255],
+                fontSize: 10,
+            },
+            bodyStyles: {
+                fontSize: 9,
+            },
         });
 
         pdf.save("lista_funcionarios.pdf");
@@ -168,4 +199,23 @@ document.getElementById("exportPDF").addEventListener("click", async function ()
     }
 });
 
+function calcularBonificacao(salario, dataCadastro) {
+    const dataInicio = new Date(dataCadastro);
+    const hoje = new Date();
+    const anos = hoje.getFullYear() - dataInicio.getFullYear();
 
+    if (anos > 5) {
+        return salario * 0.2;
+    } else if (anos > 1) {
+        return salario * 0.1;
+    }
+    return 0;
+}
+
+function formatarData(data) {
+    const dataObj = new Date(data);
+    const dia = String(dataObj.getDate()).padStart(2, "0");
+    const mes = String(dataObj.getMonth() + 1).padStart(2, "0");
+    const ano = dataObj.getFullYear();
+    return `${dia}/${mes}/${ano}`;
+}

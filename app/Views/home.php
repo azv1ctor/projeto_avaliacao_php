@@ -6,6 +6,7 @@
     <title>Funcionários</title>
     <link rel="stylesheet" href="/css/home.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
     <script src="/js/home.js" defer></script>
 </head>
 <body>
@@ -27,6 +28,7 @@
                 <th>Empresa</th>
                 <th>Salário</th>
                 <th>Bonificação</th>
+                <th>Data de Cadastro</th>
                 <th>Ações</th>
             </tr>
         </thead>
@@ -47,6 +49,8 @@
                     $linhaCor = 'background-color: #d1ecf1;';
                     $bonificacao = $funcionario['salario'] * 0.1;
                 }
+
+                $dataCadastroFormatada = $dataCadastro->format('d/m/Y');
             ?>
                 <tr style="<?php echo $linhaCor; ?>">
                     <td><?php echo $funcionario['nome']; ?></td>
@@ -56,24 +60,26 @@
                     <td><?php echo $funcionario['empresa_nome']; ?></td>
                     <td>R$ <?php echo number_format($funcionario['salario'], 2, ',', '.'); ?></td>
                     <td>R$ <?php echo number_format($bonificacao, 2, ',', '.'); ?></td>
+                    <td><?php echo $dataCadastroFormatada; ?></td>
                     <td>
                         <button class="btn edit-btn" data-id="<?php echo $funcionario['id_funcionario']; ?>">Editar</button>
                         <button class="btn delete-btn" data-id="<?php echo $funcionario['id_funcionario']; ?>">Excluir</button>
                     </td>
                 </tr>
             <?php endforeach; ?>
-            <div id="deleteConfirmModal" class="modal">
-                <div class="modal-content">
-                    <h2>Confirmação de Exclusão</h2>
-                    <p>Tem certeza de que deseja excluir este funcionário?</p>
-                    <div class="modal-buttons">
-                        <button id="confirmDeleteBtn" class="btn delete-confirm">Sim, excluir</button>
-                        <button id="cancelDeleteBtn" class="btn delete-cancel">Cancelar</button>
-                    </div>
-                </div>
-            </div>
         </tbody>
     </table>
+
+    <div id="deleteConfirmModal" class="modal">
+        <div class="modal-content">
+            <h2>Confirmação de Exclusão</h2>
+            <p>Tem certeza de que deseja excluir este funcionário?</p>
+            <div class="modal-buttons">
+                <button id="confirmDeleteBtn" class="btn delete-confirm">Sim, excluir</button>
+                <button id="cancelDeleteBtn" class="btn delete-cancel">Cancelar</button>
+            </div>
+        </div>
+    </div>
 
     <div id="editModal" class="modal">
         <div class="modal-content">
